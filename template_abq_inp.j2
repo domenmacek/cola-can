@@ -1,0 +1,31 @@
+*Heading
+** Job name: Cola Can
+*Preprint, echo=NO, model=NO, history=NO, contact=NO
+**
+**
+PARTS
+**
+{% for bl in parts %}
+*Part, name=block-{{bl.ID+1}}
+*Node
+{% for n in bl.nodes %}
+{{ loop.index + bl.offset['nodes'] }}, {{"%1.16E"|format(n[0]|float)}},  {{"%1.16E"|format(n[1]|float)}}, {{"%1.16E"|format(n[2]|float)}}
+{% endfor %}
+*Element, type=DS4
+{% for el_nodes in bl.cells['quad4'] %}
+{{loop.index + bl.offset['cells']}}, {{ el_nodes | map('string') | join(', ') }}
+{% endfor %}
+*Element, type=DS3
+{% for el_nodes in bl.cells['tri3'] %}
+{{ loop.index + bl.offset['cells'] + bl.n_cells['quad4'] }}, {{ el_nodes | map('string') | join(', ') }}
+{% endfor %}
+*Nset, nset=Set-{{ bl.ID+1 }}, generate
+ {{ bl.offset['nodes']+1 }}, {{ bl.offset['nodes']+bl.n_nodes }}, 1
+*Elset, elset=Set-{{bl.ID+1}}, generate
+ {{ bl.offset['cells']+1 }}, {{ bl.offset['cells']+bl.n_cells['quad4'] + bl.n_cells['tri3'] }}, 1
+** Section: Section-1
+*Solid Section, elset=Set-{{bl.ID+1}}, material=Material-1
+ ,
+*End Part
+{% endfor %}
+

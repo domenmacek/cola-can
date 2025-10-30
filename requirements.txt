@@ -1,0 +1,8 @@
+pip3 install numpy
+pip3 install scipy
+pip3 install cvxpy
+pip3 install matplotlib
+pip3 install pathlib
+pip3 install pyvista
+pip3 install "pyvista[jupyter]"
+pip3 install tqdm
